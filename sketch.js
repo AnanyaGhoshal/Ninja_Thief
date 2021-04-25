@@ -56,18 +56,18 @@ function setup(){
 
   caveground = createSprite(300,300);
   caveground.addImage(caveImg);
-  caveground.scale = 5;
+  caveground.scale = 1.5;
   ninja = createSprite(100,300,20,20);
   ninja.addAnimation("dying",ninjadead);
   ninja.addAnimation("jumping",ninjajumping);
   ninja.scale = 0.15;
  // ninja.debug = true;
   ninja.setCollider("rectangle",0,105,160,160);
-  endingline1 = createSprite(300,599,600,1);
-  endingline1.visible = false;
+  //endingline1 = createSprite(300,599,600,1);
+  //endingline1.visible = false;
 
-  //endingline2 = createSprite(300,2,600,1);
- // endingline2.visible = false;
+  endingline2 = createSprite(300,2,600,1);
+  endingline2.visible = false;
 
   endinegline3 = createSprite(2,300,1,600);
   endinegline3.visible = false;
@@ -83,7 +83,7 @@ function setup(){
   right_arrow.addImage(right_arrowImg);
   right_arrow.scale = 0.1;
 
-  gameover = createSprite(canvas.width/2,camera.position.y+5,10,10);
+  gameover = createSprite(285,300,10,10);
   gameover.addImage(gameoverImg);
   gameover.scale = 0.5;
 
@@ -92,7 +92,7 @@ function setup(){
   diamonds = 0;
   coin = 0;
 
-  restart = createSprite(camera.position.x-5,camera.position.y+5,10,10);
+  restart = createSprite(560,75,10,10);
   restart.addImage(restartImg);
   restart.scale = 0.1;
 
@@ -137,7 +137,7 @@ function draw(){
   leftarrow.visible = false;
   right_arrow.visible = false;
   ninja.x= 100;
-  ninja.y = 300;
+  ninja.y = 570;
   gamesound.play();
 
  }
@@ -156,7 +156,7 @@ function draw(){
     leftarrow.visible = true;
     right_arrow.visible = true;
     
-   // caveground.velocityY = (6+1*score/100);
+    caveground.velocityY = (6+1*score/100);
     spawnLine();
     spawnCactus();
     spawnWood();
@@ -172,8 +172,12 @@ function draw(){
   }
   ninja.velocityY = ninja.velocityY+0.5;
 
-  camera.position.x = ninja.x+200;
-  camera.position.y = ninja.y;
+ /* var x_position = ninja.x;
+  var y_position = ninja.y;*/
+
+  camera.position.x  = ninja.x;
+  camera.position.y =  ninja.y;
+
   
   if(mousePressedOver(leftarrow) || keyDown(LEFT_ARROW)){
     ninja.x = ninja.x-5;
@@ -219,11 +223,11 @@ function draw(){
 
   } 
   if(ninja.isTouching(invisiblelineGroup)||
-      ninja.isTouching(endingline1)|| 
+      ninja.isTouching(endingline2) ||
       ninja.isTouching(endinegline3) ||
-      ninja.isTouching(endingline4) || 
-      ninja.isTouching(enemyGroup) ||
-      ninja.isTouching(cactusGroup)){
+      ninja.isTouching(endingline4) ||     
+      ninja.isTouching(cactusGroup)||
+      ninja.isTouching(enemyGroup)){
 
        gameState = "end";
        gameoversound.play();
@@ -239,7 +243,7 @@ function draw(){
     leftarrow.visible = true;
     right_arrow.visible = true;
     
-    //caveground.velocityY = (6+2*score/100);
+    caveground.velocityY = (6+2*score/100);
     caveground.addImage(caveImage);
     caveground.scale = 3;
 
@@ -255,6 +259,9 @@ function draw(){
     ninja.velocityY = -(6+2*score/300);       
   }
     ninja.velocityY = ninja.velocityY+0.5;
+
+    camera.position.x  = canvas.width/2;
+    camera.position.y = canvas.height/2;
   
   if(mousePressedOver(leftarrow) || keyDown(LEFT_ARROW)){
     ninja.x = ninja.x-5;
@@ -296,10 +303,10 @@ function draw(){
   }
     
    if(ninja.isTouching(invisiblelineGroup)||
-      ninja.isTouching(endingline1)|| 
+      ninja.isTouching(endingline2) ||
       ninja.isTouching(endinegline3) ||
       ninja.isTouching(endingline4) || 
-      ninja.isTouching(enemyGroup) ||
+     
       ninja.isTouching(cactusGroup)){
 
        gameState = "end";
@@ -311,7 +318,7 @@ function draw(){
     
   }else if(gameState==="end"){
      
-     //caveground.velocityY = 0;
+     caveground.velocityY = 0;
 
     // gamesound.stop();
 
@@ -340,9 +347,9 @@ function draw(){
      woodGroup.setVelocityXEach(0);
      woodGroup.setVelocityYEach(0);
      woodGroup.setLifetimeEach(-1);
-     enemyGroup.setLifetimeEach(-1);
-     enemyGroup.setVelocityXEach(0);
-     enemyGroup.setVelocityYEach(0);
+    enemyGroup.setLifetimeEach(-1);
+    enemyGroup.setVelocityXEach(0);
+    enemyGroup.setVelocityYEach(0);
      coinGroup.setVelocityXEach(0);
      coinGroup.setVelocityYEach(0);
      coinGroup.setLifetimeEach(-1);
@@ -377,11 +384,11 @@ function draw(){
 
     fill("yellow");
     textSize(20);
-    text("Ruby: "+rube,camera.position.x-10,camera.position.y-10);
+    text("Ruby: "+rube,25,50);
     
     fill("lightgreen");
     textSize(20);
-    text("Diamond: "+diamonds,camera.position.x+10,camera.position.y+10);
+    text("Diamond: "+diamonds,25,30);
 
     fill("white");
     textSize(20);
@@ -433,8 +440,8 @@ function spawnLine(){
   scoringline.visible = false;
   
 
-  //scoringline.velocityY = (1+2*score/500);
-  //rubi.velocityY = (1+2*score/500);
+  scoringline.velocityY = (1+2*score/500);
+  rubi.velocityY = (1+2*score/500);
   scoringline.x = Math.round(random(150,400));
  
  
@@ -459,7 +466,7 @@ function spawnLine(){
       var cactus = createSprite(100,5,50,5);
       cactus.addImage(cactusImg);
       cactus.scale = 0.1;
-      //cactus.velocityY = (1+2*score/100);
+      cactus.velocityY = (1+2*score/100);
       cactus.x = Math.round(random(150,400));
       cactus.lifetime = 700;
       cactusGroup.add(cactus);
@@ -480,9 +487,9 @@ function spawnLine(){
         line.visible = false;
         wood.addImage(woodImg);
         wood.scale = 0.1;
-       //wood.velocityY = (1+2*score/500);
-       //invisibleline.velocityY = (1+2*score/500);
-       //line.velocityY = (1+2*score/500);
+        wood.velocityY = (1+2*score/500);
+        invisibleline.velocityY = (1+2*score/500);
+        line.velocityY = (1+2*score/500);
         wood.x = Math.round(random(100,400));
         
         invisibleline.x =  wood.x ;
@@ -508,7 +515,7 @@ function spawndiamond(){
     var diamond = createSprite(103,20,5,4);
     diamond.addImage(diamondImg);
     diamond.scale = 0.15;
-    //diamond.velocityY = (1+2*score/50);
+    diamond.velocityY = (1+2*score/50);
     diamond.x = Math.round(random(20,600));
     diamond.lifetime = 700;
     diamondGroup.add(diamond);
@@ -530,11 +537,11 @@ function spawnObstacles(){
   switch(rand){
       case 1: enemy.addImage(enemy1Img);
               enemy.scale = 0.2;
-              //enemy.velocityX = -(5+2*score/500);
+              enemy.velocityX = -(5+2*score/500);
       break;
       case 2: enemy.addImage(enemy2Img);
               enemy.scale = 0.2;
-             // enemy.velocityX = (5+2*score/500);
+              enemy.velocityX = (5+2*score/500);
       break;
   }
     enemyGroup.add(enemy);
@@ -551,8 +558,8 @@ function spawnline(){
     coin.scale = 0.05;
     scoringline.visible = false;
       
-   // scoringline.velocityY = (1+2*score/500);
-  //  coin.velocityY = (1+2*score/500);
+    scoringline.velocityY = (1+2*score/500);
+    coin.velocityY = (1+2*score/500);
     scoringline.x = Math.round(random(150,400));
     coin.x = scoringline.x;
     coin.y = scoringline.y;

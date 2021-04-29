@@ -6,7 +6,7 @@ var invisibleline, invisiblelineGroup;
 var endingline1, endingline2, endinegline3, endingline4;
 var gameState = "serve";
 var level = 1;
-var score, rube, diamonds;
+var power1, power2, rube, diamonds, score;
 var hororSound;
 var scoringline, scorelineGroup;
 var enemy1Img, enemy2Img;
@@ -16,6 +16,8 @@ var gamesound, gameoversound;
 var caveImage, coinImage, playImage;
 var start;
 var coin, coinGroup;
+var box;
+
 
 function preload(){
   caveImg = loadImage("background_cave.png");
@@ -63,8 +65,8 @@ function setup(){
   ninja.scale = 0.15;
  // ninja.debug = true;
   ninja.setCollider("rectangle",0,105,160,160);
-  //endingline1 = createSprite(300,599,600,1);
-  //endingline1.visible = false;
+  endingline1 = createSprite(300,599,600,1);
+  endingline1.visible = false;
 
   endingline2 = createSprite(300,2,600,1);
   endingline2.visible = false;
@@ -91,6 +93,8 @@ function setup(){
   rube = 0;
   diamonds = 0;
   coin = 0;
+  power1 =0;
+  power2 = 0;
 
   restart = createSprite(560,75,10,10);
   restart.addImage(restartImg);
@@ -100,6 +104,10 @@ function setup(){
   start.addImage(playImage);
   start.scale = 0.5;
   start.visible =  true;
+
+  box = createSprite(550,120,20,20);
+  box.shapeColor = "black";
+  box.visible = false;
 
 
   invisiblelineGroup = createGroup();
@@ -136,6 +144,7 @@ function draw(){
   restart.visible = false;
   leftarrow.visible = false;
   right_arrow.visible = false;
+  box.visible = true;
   ninja.x= 100;
   ninja.y = 570;
   gamesound.play();
@@ -175,8 +184,8 @@ function draw(){
  /* var x_position = ninja.x;
   var y_position = ninja.y;*/
 
-  camera.position.x  = ninja.x;
-  camera.position.y =  ninja.y;
+ camera.position.x  = ninja.x;
+ camera.position.y =  ninja.y;
 
   
   if(mousePressedOver(leftarrow) || keyDown(LEFT_ARROW)){
@@ -191,6 +200,8 @@ function draw(){
 
     lineGroup.destroyEach();
     score = score+1;
+    power1 = power1 +1;
+   
     
   }
 
@@ -206,6 +217,8 @@ function draw(){
     rubiGroup.setLifetimeEach(0);
     rube = rube+1;
     score = score+5;
+    power1 = power1 +1;
+
     
     
   }
@@ -215,6 +228,8 @@ function draw(){
     diamondGroup.destroyEach();
     diamonds = diamonds+1;
     score = score+50;
+    power1 = power1 +1;
+    
 
   }
   if(diamonds === 3){
@@ -229,10 +244,65 @@ function draw(){
       ninja.isTouching(cactusGroup)||
       ninja.isTouching(enemyGroup)){
 
-       gameState = "end";
-       gameoversound.play();
-       gamesound.stop();
+       // power1 = power1 -1;
+       power2 = power2 +1;
 
+      // gameState = "end";
+      
+      
+
+  }
+
+ /* if(enemyGroup.isTouching(invisiblelineGroup)|| 
+    enemyGroup.isTouching(cactusGroup))
+    {
+     // power1 = power1 -1;
+     power2 = power2 +1;
+     invisiblelineGroup.destroyEach();
+    // gameState = "end";
+    
+    
+}
+
+if(cactusGroup.isTouching(enemyGroup))
+{
+ // power1 = power1 -1;
+ power2 = power2 +1;
+// gameState = "end";
+
+}*/
+
+if(power1===10){
+  box.shapeColor = "blue";
+}
+if(power1===20){
+  box.shapeColor  = "green";
+}
+if(power1===30){
+  box.shapeColor = "yellow";
+}
+if(power1===40){
+  box.shapeColor = "red";
+}
+
+if(power2===10){
+  box.shapeColor = "pink";
+}
+if(power2===20){
+  box.shapeColor = "lightyellow";
+}
+if(power2===30){
+  box.shapeColor = "lightgreen";
+}
+if(power2===40){
+  box.shapeColor = "lightblue";
+}
+  
+  
+  if(power2>power1){
+    gameState= "end";
+    gameoversound.play();
+    gamesound.stop();
   }
     
     
@@ -353,8 +423,7 @@ function draw(){
      coinGroup.setVelocityXEach(0);
      coinGroup.setVelocityYEach(0);
      coinGroup.setLifetimeEach(-1);
-
-
+     box.shapeColor = "white";
      gameover.visible = true;
      restart.visible = true;
      leftarrow.visible = false;
@@ -394,6 +463,11 @@ function draw(){
     textSize(20);
     text("Score: "+score,480,50);
 
+    fill("white");
+    textSize(10);
+    text("Power: "+power1, 530,150);
+    //text("Power: "+power2, 480,200);
+
     }
 
     
@@ -425,6 +499,7 @@ function draw(){
       text("Click space to keep the Ninja moving up..", 90, 180);
       text("Use arrow keys to move Left & Right", 90,210);
       text("Collect treasures, Diamonds will take to you next level", 70,400);
+      text("Try to keep the colours of the 'BOX' in dark to save the power of the Ninja", 5,430);
     }
 
   }
@@ -579,7 +654,7 @@ function spawnline(){
 function reset(){
 
   gameState = "play";
-
+  box.shapeColor = "black";
   ninja.changeAnimation("jumping",ninjajumping);
   caveground.addImage(caveImg);
   ninja.x = 100;
@@ -587,6 +662,8 @@ function reset(){
   score = 0;
   rube = 0;
   diamonds = 0;
+  power1 = 0;
+  power2 = 0;
   level = 1;
   cactusGroup.destroyEach();
   rubiGroup.destroyEach();
